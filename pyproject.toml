@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cryptolint"
+version = "0.2.0"
+description = "A static analyzer for Python cryptographic misuse that never reports more confidence than it has, and never hides what it cannot see."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+# TODO: replace with your name (and add `email = "..."` if you want it public).
+authors = [{ name = "TODO — fill in author name" }]
+keywords = ["security", "static-analysis", "cryptography", "linter", "sast", "sarif"]
+
+# ZERO runtime dependencies. Verified by auditing every import across all
+# modules: the tool uses only ast, re, json, math, os, sys, fnmatch, builtins,
+# dataclasses and tomllib -- all standard library. tomllib is what sets the
+# 3.11 floor; it is used by config.py to parse .cryptolint.toml.
+dependencies = []
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.optional-dependencies]
+# Only needed to run the SARIF schema-validation test. The tool itself never
+# imports these, and `pip install cryptolint` does not pull them in.
+dev = ["jsonschema>=4.0"]
+
+[project.scripts]
+cryptolint = "cryptolint:cli"
+
+[tool.setuptools]
+py-modules = [
+    "cryptolint",
+    "report",
+    "formats",
+    "findings",
+    "config",
+    "suppression",
+    "source_files",
+    "secret_names",
+    "tiering",
+    "ast_helpers",
+    "detect_swallowed_except",
+    "detect_timing_compare",
+    "detect_secret_sink",
+    "detect_weak_random",
+    "detect_tls_verify",
+    "detect_ecb_mode",
+    "detect_weak_hash",
+    "detect_hardcoded_secret",
+]
